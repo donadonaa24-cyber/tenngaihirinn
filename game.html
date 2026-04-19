@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>天涯比隣 - ターン制対戦プロトタイプ</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <section id="topScreen" class="top-screen">
+      <div class="top-panel">
+        <div id="topIntro" class="top-intro">
+          <p class="top-kicker">ANIANI BATTLE CLIENT</p>
+          <h1>天涯比隣 ターン制対戦</h1>
+          <p class="top-summary">
+            6キャラ編成を作成し、モードに応じた準備を完了してから試合開始します。
+            <br />
+            フロー: ①モード選択 → ②編成（ストーリーは章選択あり）→ ③チャンネル選択（CPU対戦）→ ④対戦開始
+          </p>
+        </div>
+        <section id="titleStepPanel" class="step-panel title-step">
+          <div class="title-card card">
+            <h2>天涯比隣</h2>
+            <div class="top-actions title-actions">
+              <button id="beginPreparationBtn" type="button" class="primary-btn">物語を始める</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="modeStepPanel" class="step-panel mode-step hidden">
+          <div class="mode-card card">
+            <p class="title-kicker">MODE SELECT</p>
+            <h2>プレイモード選択</h2>
+            <p>遊び方を選んでください。ストーリーは後から内容を追加できる構成で実装しています。</p>
+            <div class="mode-choice-grid">
+              <button id="chooseStoryModeBtn" type="button" class="primary-btn">
+                ストーリーモード
+                <small>チュートリアル / 本格ストーリー</small>
+              </button>
+              <button id="chooseCpuModeBtn" type="button" class="secondary-btn">
+                CPUとの対戦
+                <small>既存の対戦フロー</small>
+              </button>
+            </div>
+            <div class="top-actions title-actions">
+              <button id="backToTitleFromModeBtn" type="button" class="ghost-btn">タイトルへ戻る</button>
+              <a class="ghost-link-btn" href="index.html">ホームへ戻る</a>
+            </div>
+          </div>
+        </section>
+
+        <section id="storyStepPanel" class="step-panel hidden">
+          <div class="step-heading">
+            <h2 id="storyStepHeading">STORY MODE</h2>
+            <p id="storyStepSummary">チュートリアルか本格ストーリーを選択してください。</p>
+          </div>
+
+          <section class="story-panel card">
+            <div class="story-layout">
+              <article class="story-nav">
+                <h3>ストーリー種別</h3>
+                <button id="storyTutorialEntryBtn" type="button" class="ghost-btn story-nav-btn">チュートリアル</button>
+                <button id="storyMainEntryBtn" type="button" class="ghost-btn story-nav-btn">本格ストーリー</button>
+                <p class="story-note">シナリオ本文は `game.js` の定義に追記するだけで拡張できます。</p>
+              </article>
+
+              <article class="story-content">
+                <h3 id="storyContentTitle">ストーリーを選択してください</h3>
+                <p id="storyContentDescription" class="story-description">
+                  左のメニューから「チュートリアル」または「本格ストーリー」を選ぶと詳細を表示します。
+                </p>
+
+                <div id="storyChapterList" class="story-chapter-list hidden"></div>
+
+                <div class="story-script-box">
+                  <h4>小説パート（プレビュー）</h4>
+                  <div id="storyScriptPreview" class="story-script-preview"></div>
+                </div>
+
+                <div class="top-actions story-actions">
+                  <button id="storyStartTutorialBtn" type="button" class="primary-btn hidden">チュートリアル開始</button>
+                  <button id="storySelectChapterBtn" type="button" class="secondary-btn hidden">この章でチーム編成へ</button>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <div class="top-actions">
+            <button id="backToModeFromStoryBtn" type="button" class="ghost-btn">モード選択へ戻る</button>
+          </div>
+        </section>
+
+        <section id="teamStepPanel" class="step-panel hidden">
+          <div class="step-heading">
+            <h2 id="teamStepTitle">STEP 1 / 2: 6キャラ編成</h2>
+            <p id="teamStepDescription">
+              戦闘メンバーと控えメンバーを選んで、君のオリジナルチームを作ろう。
+            </p>
+          </div>
+
+          <section class="prep-panel">
+            <aside class="prep-side">
+              <h3>編成状況</h3>
+              <div class="prep-summary">
+                <div class="prep-count"><span>戦闘</span><strong id="prepFieldCount">0</strong>/3</div>
+                <div class="prep-count"><span>控え</span><strong id="prepBenchCount">0</strong>/5</div>
+                <div class="prep-count"><span>合計</span><strong id="prepTotalCount">0</strong>/6</div>
+              </div>
+              <div class="prep-selected-wrap">
+                <div class="prep-selected-box">
+                  <h4>戦闘メンバー</h4>
+                  <div id="prepFieldList" class="prep-selected-list"></div>
+                </div>
+                <div class="prep-selected-box">
+                  <h4>控えメンバー</h4>
+                  <div id="prepBenchList" class="prep-selected-list"></div>
+                </div>
+              </div>
+            </aside>
+            <div id="prepRoster" class="prep-roster"></div>
+            <aside class="prep-side-actions">
+              <div class="top-actions prep-actions">
+                <button id="toChannelStepBtn" type="button" class="primary-btn">チャンネル選択へ</button>
+                <button id="backFromTeamStepBtn" type="button" class="ghost-btn">ホーム選択画面へ戻る</button>
+                <a id="teamHomeLink" class="ghost-link-btn" href="index.html">ホームへ戻る</a>
+              </div>
+              <div class="prep-presets-box">
+                <h4>お気に入りチーム（最大10件）</h4>
+                <div class="prep-preset-edit">
+                  <label for="teamPresetSlotSelect">保存スロット</label>
+                  <select id="teamPresetSlotSelect" class="prep-preset-slot-select"></select>
+                  <label for="teamPresetNameInput">チーム名</label>
+                  <input
+                    id="teamPresetNameInput"
+                    class="prep-preset-name-input"
+                    type="text"
+                    maxlength="24"
+                    placeholder="チーム名を入力"
+                  />
+                </div>
+                <div class="prep-preset-actions">
+                  <button id="saveTeamPresetBtn" type="button" class="secondary-btn small">保存</button>
+                  <button id="loadTeamPresetBtn" type="button" class="ghost-btn small">読み込み</button>
+                  <button id="deleteTeamPresetBtn" type="button" class="ghost-btn small">削除</button>
+                </div>
+                <div id="teamPresetList" class="team-preset-list"></div>
+              </div>
+            </aside>
+          </section>
+        </section>
+
+        <section id="channelStepPanel" class="step-panel hidden">
+          <div class="step-heading">
+            <h2>STEP 2 / 2: チャンネル選択</h2>
+            <p>下の候補からチャンネルを1つ選び「これにする」で確定します。確定後はそのまま戦闘へ移行します。</p>
+          </div>
+
+          <div class="channel-step-grid">
+            <article class="card channel-select-card">
+              <h3>プレイヤーチャンネルを選択</h3>
+              <p class="channel-description">一覧から選んで「これにする」を押してください。</p>
+              <div id="channelChoiceList" class="channel-choice-list"></div>
+            </article>
+
+            <article class="card channel-select-card cpu-channel-card">
+              <h3>CPUチャンネル</h3>
+              <strong id="cpuChannelName">未決定</strong>
+              <p id="cpuChannelDescription" class="channel-description">
+                プレイヤーがチャンネル確定後にCPUが選択します。
+              </p>
+            </article>
+          </div>
+
+          <div class="top-actions">
+            <button id="backToTeamStepBtn" type="button" class="ghost-btn">編成に戻る</button>
+          </div>
+        </section>
+      </div>
+      <button id="topScreenSettingsBtn" type="button" class="top-screen-settings-btn" aria-label="設定">⚙</button>
+    </section>
+
+    <div id="battleApp" class="app-shell hidden">
+      <header class="topbar card topbar-card">
+        <div class="topbar-title">
+          <h1>天涯比隣</h1>
+        </div>
+        <section class="topbar-channel-strip">
+          <article class="channel-side enemy-side">
+            <span class="label">CPU CHANNEL</span>
+            <strong id="enemyChannelLabel">未選択</strong>
+            <p id="enemyChannelDesc">チャンネル未設定</p>
+          </article>
+          <div class="vs-mark top-vs">VS</div>
+          <article class="channel-side player-side">
+            <span class="label">PLAYER CHANNEL</span>
+            <strong id="playerChannelLabel">未選択</strong>
+            <p id="playerChannelDesc">チャンネル未設定</p>
+          </article>
+        </section>
+        <div class="topbar-actions">
+          <button id="openRulesBtn" type="button" class="ghost-btn small">ルール詳細</button>
+          <div class="top-menu-wrap">
+            <button id="openTopMenuBtn" type="button" class="ghost-btn small icon-btn" aria-label="設定メニュー">⚙</button>
+            <div id="topMenuPanel" class="top-menu-panel hidden">
+              <section class="top-menu-section">
+                <p class="top-menu-title">設定</p>
+                <label class="top-menu-setting-item">
+                  <input id="menuConfirmActionsToggle" type="checkbox" checked />
+                  行動ごとに確認表示
+                </label>
+                <label class="top-menu-setting-item">
+                  <input id="menuFastEnemyToggle" type="checkbox" />
+                  CPUの行動速度を速くする
+                </label>
+                <div class="top-menu-setting-stack">
+                  <span>BGM</span>
+                  <div class="top-menu-audio-row">
+                    <input id="menuBgmVolumeSlider" type="range" min="0" max="100" step="1" value="70" />
+                    <strong id="menuBgmVolumeValue">70%</strong>
+                    <button id="menuBgmMuteToggleBtn" type="button" class="ghost-btn small">BGM OFF</button>
+                  </div>
+                </div>
+                <div class="top-menu-setting-stack">
+                  <span>効果音</span>
+                  <div class="top-menu-audio-row">
+                    <input id="menuSfxVolumeSlider" type="range" min="0" max="100" step="1" value="80" />
+                    <strong id="menuSfxVolumeValue">80%</strong>
+                    <button id="menuSfxMuteToggleBtn" type="button" class="ghost-btn small">SE OFF</button>
+                  </div>
+                </div>
+              </section>
+              <div class="top-menu-divider" role="separator"></div>
+              <button id="resetGameBtn" type="button" class="ghost-btn small">ゲームリセット</button>
+              <button id="backToTopBtn" type="button" class="ghost-btn small">トップ画面へ</button>
+              <a class="ghost-link-btn small" href="index.html">ホームへ</a>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div id="turnBanner" class="turn-banner" aria-live="polite"></div>
+      <div id="chanceOverlay" class="chance-overlay hidden" aria-live="polite">
+        <div class="chance-card">
+          <div class="chance-wheel"></div>
+          <p id="chanceTitle" class="chance-title">判定中...</p>
+          <p id="chanceRate" class="chance-rate"></p>
+          <button id="chanceSpinBtn" type="button" class="primary-btn chance-spin-btn">ルーレットを回す</button>
+          <p id="chanceCountdown" class="chance-countdown hidden"></p>
+          <p id="chanceResult" class="chance-result">-</p>
+        </div>
+      </div>
+
+      <main class="battle-layout">
+        <section class="battle-main">
+          <section class="zone card enemy-zone">
+            <div class="zone-header">
+              <div class="zone-head-title">
+                <h2>相手フィールド（CPU）</h2>
+                <span id="enemyFieldChannelBadge" class="field-channel-badge">CPUチャンネル: 未選択</span>
+              </div>
+              <span id="enemyFieldNote" class="small-note">0 / 3</span>
+            </div>
+            <div class="zone-body">
+              <div class="bench-wrap compact">
+                <h3>CPU 控え / 気絶</h3>
+                <div id="enemyBench" class="bench-grid"></div>
+              </div>
+              <div id="enemyField" class="field-grid"></div>
+            </div>
+          </section>
+
+          <section class="zone card player-zone">
+            <div class="zone-header">
+              <div class="zone-head-title">
+                <h2>プレイヤーフィールド</h2>
+                <span id="playerFieldChannelBadge" class="field-channel-badge">プレイヤーチャンネル: 未選択</span>
+              </div>
+              <span id="playerFieldNote" class="small-note">0 / 3</span>
+            </div>
+            <div class="zone-body">
+              <div class="bench-wrap compact">
+                <h3>プレイヤー 控え / 気絶</h3>
+                <div id="playerBench" class="bench-grid"></div>
+              </div>
+              <div id="playerField" class="field-grid"></div>
+            </div>
+          </section>
+        </section>
+
+        <aside class="battle-side-panel">
+          <section class="battle-status card">
+            <div class="status-block">
+              <span class="label">ターン</span>
+              <strong id="turnLabel">プレイヤー</strong>
+            </div>
+            <div class="status-block">
+              <span class="label">行動済み</span>
+              <strong><span id="actionsUsed">0</span> / 3</strong>
+            </div>
+            <div class="status-block">
+              <span class="label">スキル使用</span>
+              <strong><span id="skillsUsed">0</span> / 2</strong>
+            </div>
+            <div class="status-block">
+              <span class="label">勝敗</span>
+              <strong id="victoryLabel">進行中</strong>
+            </div>
+            <div class="battle-controls">
+              <button id="reviveBtn" type="button" class="ghost-btn" disabled>死者蘇生</button>
+              <button id="cancelTargetBtn" type="button" class="ghost-btn" disabled>選択キャンセル</button>
+              <button id="endTurnBtn" type="button" class="danger-btn">ターン終了</button>
+            </div>
+          </section>
+
+          <section class="battle-message card">
+            <p id="cpuActionNotice" class="cpu-action-notice">CPU待機中</p>
+            <div id="selectedInfo" class="selected-info">味方フィールドのキャラを選択して行動してください。</div>
+            <p id="targetHint" class="target-hint">通常状態</p>
+          </section>
+
+          <article class="log-card card">
+            <div class="zone-header">
+              <h2>バトルログ</h2>
+              <button id="clearLogBtn" type="button" class="ghost-btn small">クリア</button>
+            </div>
+            <div id="logArea" class="log-area" aria-live="polite"></div>
+          </article>
+        </aside>
+      </main>
+    </div>
+
+    <dialog id="rulesDialog" class="rules-dialog">
+      <div class="dialog-inner">
+        <h2>ルール要点</h2>
+        <ul>
+          <li>勝利条件は相手フィールド上のキャラ全滅（控えが残っていても敗北）。</li>
+          <li>1ターンの行動上限は3人、スキル使用は2人まで。</li>
+          <li>交代で控えに戻したキャラは2ターン出撃不可。</li>
+          <li>状態異常: 麻痺（行動不能）/ 毒 / 継続ダメージ / シールドを実装。</li>
+          <li>チャンネル効果はプレイヤーとCPUで個別に適用されます。</li>
+        </ul>
+        <button id="closeRulesBtn" type="button" class="primary-btn">閉じる</button>
+      </div>
+    </dialog>
+
+    <dialog id="settingsDialog" class="rules-dialog">
+      <div class="dialog-inner">
+        <h2>設定</h2>
+        <label class="setting-item">
+          <input id="confirmActionsToggle" type="checkbox" checked />
+          行動ごとに確認ダイアログを表示
+        </label>
+        <label class="setting-item">
+          <input id="fastEnemyToggle" type="checkbox" />
+          CPUの行動速度を速くする
+        </label>
+        <div class="setting-item setting-item-stack">
+          <span>BGM音量</span>
+          <div class="setting-audio-row">
+            <input id="bgmVolumeSlider" type="range" min="0" max="100" step="1" value="70" />
+            <strong id="bgmVolumeValue">70%</strong>
+            <button id="bgmMuteToggleBtn" type="button" class="ghost-btn small">ミュート</button>
+          </div>
+        </div>
+        <div class="setting-item setting-item-stack">
+          <span>効果音音量</span>
+          <div class="setting-audio-row">
+            <input id="sfxVolumeSlider" type="range" min="0" max="100" step="1" value="80" />
+            <strong id="sfxVolumeValue">80%</strong>
+            <button id="sfxMuteToggleBtn" type="button" class="ghost-btn small">SE OFF</button>
+          </div>
+        </div>
+        <div class="settings-actions">
+          <button id="closeSettingsBtn" type="button" class="primary-btn">閉じる</button>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="actionConfirmDialog" class="rules-dialog confirm-dialog">
+      <div class="dialog-inner confirm-inner">
+        <h2>確認</h2>
+        <p id="actionConfirmMessage" class="confirm-message"></p>
+        <div class="settings-actions confirm-actions">
+          <button id="actionConfirmCancelBtn" type="button" class="ghost-btn">キャンセル</button>
+          <button id="actionConfirmOkBtn" type="button" class="primary-btn">実行</button>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="hpSpendDialog" class="rules-dialog confirm-dialog">
+      <div class="dialog-inner confirm-inner">
+        <h2>舞依スキル: HP消費量</h2>
+        <p id="hpSpendPrompt" class="confirm-message">消費するHPを選択してください。</p>
+        <div class="hp-spend-wrap">
+          <input id="hpSpendRange" type="range" min="1" max="10" value="1" />
+          <div class="hp-spend-value-row">
+            <span>選択値</span>
+            <strong id="hpSpendValue">1</strong>
+          </div>
+          <input id="hpSpendNumber" type="number" min="1" max="10" value="1" />
+        </div>
+        <div class="settings-actions confirm-actions">
+          <button id="hpSpendCancelBtn" type="button" class="ghost-btn">キャンセル</button>
+          <button id="hpSpendOkBtn" type="button" class="primary-btn">確定</button>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="characterActionDialog" class="rules-dialog character-action-dialog">
+      <div class="dialog-inner character-action-inner">
+        <h2>行動選択</h2>
+        <p id="characterActionTitle" class="character-action-title"></p>
+        <div class="character-action-buttons">
+          <button id="attackBtn" type="button" class="primary-btn">通常攻撃</button>
+          <button id="skillBtn" type="button" class="secondary-btn">スキル</button>
+          <button id="swapBtn" type="button" class="ghost-btn">交代</button>
+        </div>
+        <div class="settings-actions">
+          <button id="closeCharacterActionBtn" type="button" class="ghost-btn">閉じる</button>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="prepRoleDialog" class="rules-dialog character-action-dialog">
+      <div class="dialog-inner character-action-inner">
+        <h2>配置選択</h2>
+        <p id="prepRoleTitle" class="character-action-title"></p>
+        <div class="character-action-buttons">
+          <button id="prepToFieldBtn" type="button" class="primary-btn">戦闘にする</button>
+          <button id="prepToBenchBtn" type="button" class="secondary-btn">控えにする</button>
+          <button id="prepToNoneBtn" type="button" class="ghost-btn">外す</button>
+        </div>
+        <div class="settings-actions">
+          <button id="closePrepRoleBtn" type="button" class="ghost-btn">キャンセル</button>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="channelInfoDialog" class="rules-dialog">
+      <div class="dialog-inner">
+        <h2>チャンネル効果一覧</h2>
+        <div id="channelInfoList" class="channel-list"></div>
+        <div class="settings-actions">
+          <button id="closeChannelInfoBtn" type="button" class="primary-btn">閉じる</button>
+        </div>
+      </div>
+    </dialog>
+
+    <audio id="bgmTitle" src="assets/audio/bgm_title.mp3" preload="auto" loop></audio>
+    <audio id="bgmMenu" src="assets/audio/bgm_menu.mp3" preload="auto" loop></audio>
+    <audio id="bgmBattle" src="assets/audio/bgm_battle.mp3" preload="auto" loop></audio>
+    <script src="game.js"></script>
+  </body>
+</html>

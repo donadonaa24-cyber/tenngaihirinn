@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>天涯比隣 eSports | 公式ホームページ</title>
+    <meta
+      name="description"
+      content="フェニチルさん原作、あにあに制作『天涯比隣』のブラウザ対戦ゲーム。ルール・キャラ性能・ゲームリンク・原作導線を掲載。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="home.css" />
+  </head>
+  <body>
+    <div class="site-bg"></div>
+
+    <header class="site-header">
+      <a class="brand" href="#top">TENGAI HIRIN eSports</a>
+      <nav class="main-nav">
+        <a href="#overview">OVERVIEW</a>
+        <a href="#rules">RULES</a>
+        <a href="#roster">ROSTER</a>
+        <a href="#origin">ORIGINAL</a>
+        <a href="game.html">PLAY GAME</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="hero-kicker">ANIANI BROWSER BATTLE PROJECT</p>
+          <h1>天涯比隣<br />TURN BATTLE ARENA</h1>
+          <p>
+            チャンネル選択、6人編成、ターン制の駆け引きで勝利を目指す
+            ブラウザ対戦ゲーム。
+            <br />
+            まずはUIプロトタイプをベースに、遊べる対戦体験へ育成中です。
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-main" href="game.html">ゲームをプレイ</a>
+            <a class="btn btn-sub" href="https://note.com/jz_fenichil" target="_blank" rel="noopener noreferrer">原作を読む</a>
+          </div>
+
+          <dl class="quick-spec">
+            <div>
+              <dt>GENRE</dt>
+              <dd>ターン制対戦</dd>
+            </div>
+            <div>
+              <dt>TEAM SIZE</dt>
+              <dd>6キャラ編成</dd>
+            </div>
+            <div>
+              <dt>PLATFORM</dt>
+              <dd>Browser / PC / Mobile</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="hero-visual">
+          <div class="hero-frame">
+            <div class="hero-placeholder">KEY VISUAL SLOT</div>
+          </div>
+          <div class="hero-side-card">
+            <h2>BATTLE STATUS</h2>
+            <ul>
+              <li>1ターン最大3行動・スキルは最大2回</li>
+              <li>交代で控えに戻したキャラは2ターン出撃不可</li>
+              <li>毒・麻痺・継続ダメージ・シールドを実装</li>
+              <li>相手フィールド全滅で勝利</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="overview" class="panel">
+        <h2>Overview</h2>
+        <div class="overview-grid">
+          <article>
+            <h3>対戦の流れ</h3>
+            <p>試合前に6人編成を作成し、プレイヤーとCPUそれぞれでチャンネルを決定して開戦します。</p>
+          </article>
+          <article>
+            <h3>勝利条件</h3>
+            <p>相手フィールド上のキャラをすべて倒した時点で勝利。控えが残っていてもフィールド全滅で敗北です。</p>
+          </article>
+          <article>
+            <h3>編成ポイント</h3>
+            <p>ヒーラー・デバッファー・アタッカーを混ぜて、交代とスキル配分で主導権を取りにいく設計です。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="rules" class="panel">
+        <h2>Quick Rules</h2>
+        <div class="rules-grid">
+          <article class="rule-card">
+            <h3>基本ルール</h3>
+            <ul>
+              <li>6人編成で開始時に1〜3人をフィールドへ配置</li>
+              <li>自ターンの行動は最大3人、スキル使用は最大2人</li>
+              <li>相手ターン中は行動不可</li>
+            </ul>
+          </article>
+          <article class="rule-card">
+            <h3>状態異常</h3>
+            <ul>
+              <li>麻痺: 完全行動不能</li>
+              <li>毒: 控えに戻るまでターン終了時ダメージ（重ねがけ不可）</li>
+              <li>継続ダメージ / シールドを実装</li>
+            </ul>
+          </article>
+          <article class="rule-card">
+            <h3>チャンネル例</h3>
+            <ul>
+              <li>ラッキーチャンス（確率+20%）</li>
+              <li>死者蘇生（全回復で1体復帰・一度きり）</li>
+              <li>一致団結 / 加護 / ドーピング / 女子会 / 男子会</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="roster" class="panel">
+        <h2>Character Performance</h2>
+        <div id="rosterGrid" class="roster-grid"></div>
+      </section>
+
+      <section id="origin" class="panel origin-panel">
+        <h2>Original Story</h2>
+        <p>
+          天涯比隣の原作・世界観は、フェニチルさんのnoteで順次公開予定です。
+          先に原作を読むと、キャラ同士の関係性やスキル背景が見えて対戦がもっと楽しくなります。
+        </p>
+        <p class="origin-catch">
+          原作は現在執筆中。原作を読むと余計にゲームが楽しくなるかも！
+        </p>
+        <a class="btn btn-main origin-btn" href="https://note.com/jz_fenichil" target="_blank" rel="noopener noreferrer">原作を読む</a>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 天涯比隣 Project / 原作: フェニチル / 制作: あにあに</p>
+      <div>
+        <a href="game.html">ゲームをプレイ</a>
+        <a href="https://note.com/jz_fenichil" target="_blank" rel="noopener noreferrer">原作を読む</a>
+      </div>
+    </footer>
+
+    <script src="home.js"></script>
+  </body>
+</html>
