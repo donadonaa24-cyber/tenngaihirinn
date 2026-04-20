@@ -240,10 +240,14 @@
       <div id="turnBanner" class="turn-banner" aria-live="polite"></div>
       <div id="chanceOverlay" class="chance-overlay hidden" aria-live="polite">
         <div class="chance-card">
-          <div class="chance-wheel"></div>
+          <div class="chance-slot-machine" aria-hidden="true">
+            <div id="chanceSlot1" class="chance-slot">?</div>
+            <div id="chanceSlot2" class="chance-slot">?</div>
+            <div id="chanceSlot3" class="chance-slot">?</div>
+          </div>
           <p id="chanceTitle" class="chance-title">判定中...</p>
           <p id="chanceRate" class="chance-rate"></p>
-          <button id="chanceSpinBtn" type="button" class="primary-btn chance-spin-btn">ルーレットを回す</button>
+          <button id="chanceSpinBtn" type="button" class="primary-btn chance-spin-btn">スロットを回す</button>
           <p id="chanceCountdown" class="chance-countdown hidden"></p>
           <p id="chanceResult" class="chance-result">-</p>
         </div>

@@ -450,6 +450,7 @@ const els = {
   chanceSpinBtn: document.getElementById("chanceSpinBtn"),
   chanceCountdown: document.getElementById("chanceCountdown"),
   chanceResult: document.getElementById("chanceResult"),
+  chanceSlots: Array.from(document.querySelectorAll(".chance-slot")),
   cpuActionNotice: document.getElementById("cpuActionNotice"),
   selectedInfo: document.getElementById("selectedInfo"),
   targetHint: document.getElementById("targetHint"),
@@ -505,9 +506,12 @@ const els = {
 let confirmResolver = null;
 let hpSpendResolver = null;
 let chanceOverlayTimer = null;
+let chanceOverlayResultTimer = null;
 let chanceSpinAutoTimer = null;
 let chanceSpinCountdownTimer = null;
 let chanceSpinStartHandler = null;
+let chanceSlotIntervals = [];
+let chanceSlotStopTimers = [];
 
 const BGM_TRACKS = ["title", "menu", "battle"];
 const BGM_VOLUME = {
@@ -997,10 +1001,48 @@ function getEffectiveChance(baseChance, side) {
   return Math.min(1, Math.max(0, baseChance + bonus));
 }
 
+function getChanceSlots() {
+  if (Array.isArray(els.chanceSlots) && els.chanceSlots.length) {
+    return els.chanceSlots;
+  }
+  return [document.getElementById("chanceSlot1"), document.getElementById("chanceSlot2"), document.getElementById("chanceSlot3")].filter(
+    Boolean,
+  );
+}
+
+function resetChanceSlotDisplay() {
+  const slots = getChanceSlots();
+  slots.forEach((slot) => {
+    slot.classList.remove("spinning", "hit", "miss");
+    slot.textContent = "?";
+  });
+}
+
+function randomChanceSlotSymbol() {
+  return Math.random() < 0.52 ? "当" : "外";
+}
+
+function getChanceSlotResultSymbols(success) {
+  if (success) {
+    return ["当", "当", "当"];
+  }
+  const symbols = ["当", "当", "当"];
+  const missCount = Math.random() < 0.45 ? 2 : 1;
+  const missIndexes = shuffled([0, 1, 2]).slice(0, missCount);
+  missIndexes.forEach((index) => {
+    symbols[index] = "外";
+  });
+  return symbols;
+}
+
 function clearChanceTimers() {
   if (chanceOverlayTimer) {
     window.clearTimeout(chanceOverlayTimer);
     chanceOverlayTimer = null;
+  }
+  if (chanceOverlayResultTimer) {
+    window.clearTimeout(chanceOverlayResultTimer);
+    chanceOverlayResultTimer = null;
   }
   if (chanceSpinAutoTimer) {
     window.clearTimeout(chanceSpinAutoTimer);
@@ -1010,11 +1052,20 @@ function clearChanceTimers() {
     window.clearInterval(chanceSpinCountdownTimer);
     chanceSpinCountdownTimer = null;
   }
+  chanceSlotIntervals.forEach((timerId) => {
+    window.clearInterval(timerId);
+  });
+  chanceSlotIntervals = [];
+  chanceSlotStopTimers.forEach((timerId) => {
+    window.clearTimeout(timerId);
+  });
+  chanceSlotStopTimers = [];
 }
 
 function hideChanceOverlay() {
   clearChanceTimers();
   chanceSpinStartHandler = null;
+  resetChanceSlotDisplay();
   if (!els.chanceOverlay) return;
   els.chanceOverlay.classList.remove("show", "rolling", "success", "fail", "waiting");
   els.chanceOverlay.classList.add("hidden");
@@ -1039,9 +1090,10 @@ function showChanceResult(title, baseChance, side, success) {
   const isManualSide = side === "player";
   clearChanceTimers();
   chanceSpinStartHandler = null;
+  resetChanceSlotDisplay();
 
   els.chanceTitle.textContent = title;
-  els.chanceRate.textContent = `成功率 ${rate}%`;
+  els.chanceRate.textContent = `成功率 ${rate}%（当たり3つで成功）`;
   els.chanceResult.textContent = "-";
   if (els.chanceSpinBtn) {
     els.chanceSpinBtn.classList.toggle("hidden", !isManualSide);
@@ -1049,7 +1101,7 @@ function showChanceResult(title, baseChance, side, success) {
   }
   if (els.chanceCountdown) {
     els.chanceCountdown.classList.toggle("hidden", !isManualSide);
-    els.chanceCountdown.textContent = isManualSide ? "5秒後に自動で判定します" : "";
+    els.chanceCountdown.textContent = isManualSide ? "5秒後に自動でスロット開始" : "";
   }
 
   els.chanceOverlay.classList.remove("hidden", "show", "success", "fail", "rolling", "waiting");
@@ -1072,22 +1124,45 @@ function showChanceResult(title, baseChance, side, success) {
         els.chanceSpinBtn.disabled = true;
       }
       if (els.chanceCountdown) {
-        els.chanceCountdown.textContent = "判定中…";
+        els.chanceCountdown.textContent = "スロット判定中…";
       }
       els.chanceOverlay?.classList.remove("waiting");
+      els.chanceOverlay?.classList.remove("success", "fail");
       els.chanceOverlay?.classList.add("rolling");
 
-      window.setTimeout(() => {
+      const slots = getChanceSlots();
+      const resultSymbols = getChanceSlotResultSymbols(success);
+      slots.forEach((slot, index) => {
+        slot.classList.remove("hit", "miss");
+        slot.classList.add("spinning");
+        slot.textContent = randomChanceSlotSymbol();
+        const intervalId = window.setInterval(() => {
+          slot.textContent = randomChanceSlotSymbol();
+        }, 92 + index * 16);
+        chanceSlotIntervals.push(intervalId);
+        const stopTimer = window.setTimeout(() => {
+          window.clearInterval(intervalId);
+          chanceSlotIntervals = chanceSlotIntervals.filter((timerId) => timerId !== intervalId);
+          const symbol = resultSymbols[index] ?? "外";
+          slot.textContent = symbol;
+          slot.classList.remove("spinning");
+          slot.classList.add(symbol === "当" ? "hit" : "miss");
+        }, 780 + index * 360);
+        chanceSlotStopTimers.push(stopTimer);
+      });
+
+      const resultDelay = slots.length ? 1960 : 1200;
+      chanceOverlayResultTimer = window.setTimeout(() => {
         els.chanceOverlay?.classList.remove("rolling");
         els.chanceOverlay?.classList.add(success ? "success" : "fail");
         if (els.chanceResult) {
           els.chanceResult.textContent = success ? "SUCCESS" : "FAIL";
         }
-      }, 1200);
+      }, resultDelay);
 
       chanceOverlayTimer = window.setTimeout(() => {
         finish();
-      }, 3200);
+      }, resultDelay + 1700);
     };
 
     chanceSpinStartHandler = startSpin;
@@ -1102,12 +1177,12 @@ function showChanceResult(title, baseChance, side, success) {
             chanceSpinCountdownTimer = null;
           }
           if (els.chanceCountdown) {
-            els.chanceCountdown.textContent = "自動で判定を開始します…";
+            els.chanceCountdown.textContent = "自動でスロットを開始します…";
           }
           return;
         }
         if (els.chanceCountdown) {
-          els.chanceCountdown.textContent = `${remain}秒後に自動で判定します`;
+          els.chanceCountdown.textContent = `${remain}秒後に自動でスロット開始`;
         }
       }, 1000);
 
@@ -2356,6 +2431,32 @@ function canPlayerUseReviveNow() {
   return getSideChannel("player") === "revive" && !state.reviveUsed.player && state.player.grave.length > 0;
 }
 
+async function tryDirectReviveByGraveClick(id, side, zone) {
+  if (state.gameOver || state.screen !== "battle") return false;
+  if (state.pendingAction) return false;
+  if (side !== "player" || zone !== "grave") return false;
+  if (!canPlayerUseReviveNow()) return false;
+  if (state.turn !== "player") return false;
+
+  const target = getCharacter(id);
+  if (!target) return false;
+  if (!(await confirmAction(`${target.name} に死者蘇生を使いますか？`))) {
+    return false;
+  }
+
+  const revived = useRevive("player", id);
+  if (!revived) {
+    log("死者蘇生を実行できませんでした。");
+    return true;
+  }
+
+  clearPendingAction();
+  clearSelection();
+  checkWinCondition();
+  render();
+  return true;
+}
+
 function canPlayerTakeAnyAction() {
   if (state.turn !== "player" || state.gameOver || state.screen !== "battle" || state.turnTransitioning) return false;
   if (state.pendingAction) return true;
@@ -3000,6 +3101,10 @@ async function handleCardClick(id, side, zone) {
       render();
       return;
     }
+  }
+
+  if (await tryDirectReviveByGraveClick(id, side, zone)) {
+    return;
   }
 
   state.selectedId = id;
