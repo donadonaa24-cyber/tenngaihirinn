@@ -13,11 +13,16 @@ const CHARACTERS = [
   { id: "nana", name: "栞那", role: "デバッファー", gender: "女", atk: 4, hp: 22, skill: "毒付与（重ねがけ不可）", image: "栞那.png" },
 ];
 
-const HERO_IMAGE_FILES = ["暁.png", "千鶴.png", "拓海.png", "舞依.png"];
-const HERO_LOGO_FILES = ["ASTER.png", "CREST.png", "RIOT.png"];
+const HERO_IMAGE_FILES = ["RIOT.png", "CREST.png", "ASTER.png"];
+const HERO_LOGO_FILES = ["RIOT.png", "CREST.png", "ASTER.png"];
+const ILLUSTRATION_DIR = "assets/イラスト";
 
 function toAssetPath(fileName) {
-  return encodeURI(fileName);
+  if (!fileName) return "";
+  const normalized = fileName.replace(/\\/g, "/");
+  if (/^(?:https?:|data:|blob:)/.test(normalized)) return normalized;
+  if (normalized.startsWith("/") || normalized.startsWith("assets/")) return encodeURI(normalized);
+  return encodeURI(`${ILLUSTRATION_DIR}/${normalized}`);
 }
 
 function buildHeroVisual() {
@@ -39,7 +44,7 @@ function buildHeroVisual() {
       <div class="hero-stage-gradient"></div>
       <div class="hero-caption">
         <strong>TENGAI HIRIN</strong>
-        <span>Turn Battle Arena</span>
+        <span>LAST SIGNAL YOUTH STORY</span>
       </div>
       <div class="hero-logo-row">
         ${logos}
@@ -57,7 +62,7 @@ function startHeroRotation() {
     slides[current].classList.remove("is-active");
     current = (current + 1) % slides.length;
     slides[current].classList.add("is-active");
-  }, 3200);
+  }, 3600);
 }
 
 function buildRosterCards() {
@@ -107,6 +112,7 @@ function bindImageFallbacks() {
         image.style.display = "none";
       }
     });
+
     image.addEventListener("load", () => {
       if (image.classList.contains("roster-art-image")) {
         image.classList.remove("is-hidden");

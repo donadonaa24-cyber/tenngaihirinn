@@ -3,62 +3,65 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>天涯比隣 eSports | 公式ホームページ</title>
+    <title>天涯比隣 | Last Signal 青春群像劇</title>
     <meta
       name="description"
-      content="フェニチルさん原作、あにあに制作『天涯比隣』のブラウザ対戦ゲーム。ルール・キャラ性能・ゲームリンク・原作導線を掲載。"
+      content="eスポーツ競技『Last Signal』に挑む高校生たちの青春群像劇『天涯比隣』公式ページ。原作あらすじ・チーム紹介・キャラクター性能・ゲームへの導線を掲載。"
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="home.css" />
   </head>
   <body>
-    <div class="site-bg"></div>
+    <div class="site-bg" aria-hidden="true"></div>
+    <div class="site-glow" aria-hidden="true"></div>
 
     <header class="site-header">
-      <a class="brand" href="#top">TENGAI HIRIN eSports</a>
+      <a class="brand" href="#top">天涯比隣</a>
       <nav class="main-nav">
-        <a href="#overview">OVERVIEW</a>
-        <a href="#rules">RULES</a>
-        <a href="#roster">ROSTER</a>
-        <a href="#origin">ORIGINAL</a>
-        <a href="game.html">PLAY GAME</a>
+        <a href="#synopsis">原作あらすじ</a>
+        <a href="#teams">チーム</a>
+        <a href="#rules">ルール</a>
+        <a href="#characters">キャラクター</a>
+        <a href="#origin">原作を読む</a>
       </nav>
+      <div class="header-actions">
+        <a class="btn btn-main" href="game.html">対戦を始める</a>
+      </div>
     </header>
 
     <main id="top">
       <section class="hero">
         <div class="hero-copy">
-          <p class="hero-kicker">ANIANI BROWSER BATTLE PROJECT</p>
-          <h1>天涯比隣<br />TURN BATTLE ARENA</h1>
-          <p>
-            チャンネル選択、6人編成、ターン制の駆け引きで勝利を目指す
-            ブラウザ対戦ゲーム。
-            <br />
-            まずはUIプロトタイプをベースに、遊べる対戦体験へ育成中です。
+          <p class="hero-kicker">LAST SIGNAL YOUTH ESPORTS STORY</p>
+          <h1>
+            eスポーツに、恋に、<br />
+            仲間に、本気で向き合う。
+          </h1>
+          <p class="hero-lead">
+            Riot、Crest、Aster。<br />
+            三つのチームと十二人の高校生が、競技と日常のはざまで揺れながら駆け抜ける青春群像劇。
           </p>
-
           <div class="hero-actions">
-            <a class="btn btn-main" href="game.html">ゲームをプレイ</a>
-            <a class="btn btn-sub" href="https://note.com/jz_fenichil" target="_blank" rel="noopener noreferrer">原作を読む</a>
+            <a class="btn btn-main" href="game.html">ブラウザゲームをプレイ</a>
+            <a class="btn btn-sub" href="#origin">原作を読む</a>
           </div>
-
           <dl class="quick-spec">
             <div>
-              <dt>GENRE</dt>
-              <dd>ターン制対戦</dd>
+              <dt>ジャンル</dt>
+              <dd>青春群像劇 × eスポーツ</dd>
             </div>
             <div>
-              <dt>TEAM SIZE</dt>
-              <dd>6キャラ編成</dd>
+              <dt>舞台</dt>
+              <dd>高校対抗 Last Signal</dd>
             </div>
             <div>
-              <dt>PLATFORM</dt>
-              <dd>Browser / PC / Mobile</dd>
+              <dt>登場チーム</dt>
+              <dd>Riot / Crest / Aster</dd>
             </div>
           </dl>
         </div>
@@ -67,81 +70,102 @@
           <div class="hero-frame">
             <div class="hero-placeholder">KEY VISUAL SLOT</div>
           </div>
-          <div class="hero-side-card">
-            <h2>BATTLE STATUS</h2>
-            <ul>
-              <li>1ターン最大3行動・スキルは最大2回</li>
-              <li>交代で控えに戻したキャラは2ターン出撃不可</li>
-              <li>毒・麻痺・継続ダメージ・シールドを実装</li>
-              <li>相手フィールド全滅で勝利</li>
-            </ul>
-          </div>
         </div>
       </section>
 
-      <section id="overview" class="panel">
-        <h2>Overview</h2>
-        <div class="overview-grid">
-          <article>
-            <h3>対戦の流れ</h3>
-            <p>試合前に6人編成を作成し、プレイヤーとCPUそれぞれでチャンネルを決定して開戦します。</p>
+      <section id="synopsis" class="panel synopsis-panel">
+        <h2>原作あらすじ</h2>
+        <p>
+          eスポーツ競技「Last Signal」に打ち込む高校生たちの、青春と恋と進路の物語。
+        </p>
+        <p>
+          学校に試験的に組まれたチームだったRiotは、千鶴、碧、栞那、龍太の四人で戦い続けるうちに、誰にも代えがたい“自分たちのチーム”になっていた。
+          そんなRiotの前に立つのは、朝霧高校のCrest、星乃宮高校のAster。
+          三つのチームは夏合宿や交流試合、レイカ杯を通してぶつかり合い、競技の中で互いを知り、少しずつ日常の中にも入り込んでいく。
+        </p>
+        <p>
+          感覚で勝ち筋を掴む千鶴。千鶴を誰より近くで支える碧。
+          理性的な暁が目を奪われたのは、千鶴の誰にも読めない一手だった。
+          仲間として、ライバルとして、そして特別な誰かとして。
+          勝ちたい気持ちの隣で、それぞれの恋心もまた静かに形を変えていく。
+        </p>
+        <p>
+          やがて彼らの前には、レイカ杯だけではなく、その先の進路も現れる。
+          プロへの誘い、進学、チームの終わりと新しい始まり。
+          選ばなければならない未来の中で、それでも彼らは、自分たちで掴みたいものを見つけていく。
+        </p>
+        <p class="synopsis-catch">
+          これは、Aster、Crest、Riot――三つのチームと十二人の高校生たちが、
+          競技に、恋に、仲間に、本気で向き合いながら駆け抜ける青春群像劇。
+        </p>
+      </section>
+
+      <section id="teams" class="panel">
+        <h2>チーム紹介</h2>
+        <div class="team-grid">
+          <article class="team-card">
+            <img src="assets/イラスト/RIOT.png" alt="Riot チームビジュアル" />
+            <h3>Riot</h3>
+            <p>試験編成から始まった四人のチーム。ぶつかりながらも、自分たちの戦い方を見つけていく。</p>
           </article>
-          <article>
-            <h3>勝利条件</h3>
-            <p>相手フィールド上のキャラをすべて倒した時点で勝利。控えが残っていてもフィールド全滅で敗北です。</p>
+          <article class="team-card">
+            <img src="assets/イラスト/CREST.png" alt="Crest チームビジュアル" />
+            <h3>Crest</h3>
+            <p>朝霧高校代表。連携と安定感を武器に、Riotの前に立つ強豪チーム。</p>
           </article>
-          <article>
-            <h3>編成ポイント</h3>
-            <p>ヒーラー・デバッファー・アタッカーを混ぜて、交代とスキル配分で主導権を取りにいく設計です。</p>
+          <article class="team-card">
+            <img src="assets/イラスト/ASTER.png" alt="Aster チームビジュアル" />
+            <h3>Aster</h3>
+            <p>星乃宮高校代表。試合運びの巧さと攻撃的な勝負勘で、物語に火をつける。</p>
           </article>
         </div>
       </section>
 
       <section id="rules" class="panel">
-        <h2>Quick Rules</h2>
+        <h2>ゲーム概要</h2>
         <div class="rules-grid">
           <article class="rule-card">
             <h3>基本ルール</h3>
             <ul>
-              <li>6人編成で開始時に1〜3人をフィールドへ配置</li>
-              <li>自ターンの行動は最大3人、スキル使用は最大2人</li>
-              <li>相手ターン中は行動不可</li>
+              <li>6人編成で試合開始、1〜3人をフィールドに出撃。</li>
+              <li>1ターンで最大3人行動、スキルは最大2回まで。</li>
+              <li>相手フィールド上のキャラを全滅させると勝利。</li>
             </ul>
           </article>
           <article class="rule-card">
-            <h3>状態異常</h3>
+            <h3>戦術要素</h3>
             <ul>
-              <li>麻痺: 完全行動不能</li>
-              <li>毒: 控えに戻るまでターン終了時ダメージ（重ねがけ不可）</li>
-              <li>継続ダメージ / シールドを実装</li>
+              <li>麻痺、毒、継続ダメージ、シールドなどの状態管理。</li>
+              <li>控えとの交代と出撃タイミングが試合展開を左右。</li>
+              <li>チームごとの役割とスキル連携が勝負の鍵。</li>
             </ul>
           </article>
           <article class="rule-card">
-            <h3>チャンネル例</h3>
+            <h3>チャンネル効果</h3>
             <ul>
-              <li>ラッキーチャンス（確率+20%）</li>
-              <li>死者蘇生（全回復で1体復帰・一度きり）</li>
-              <li>一致団結 / 加護 / ドーピング / 女子会 / 男子会</li>
+              <li>ラッキーチャンス、死者蘇生、一致団結などを試合前に選択。</li>
+              <li>チャンネルによって戦略と勝ち筋が大きく変化。</li>
+              <li>プレイヤーとCPUで別々のチャンネルを使用可能。</li>
             </ul>
           </article>
         </div>
       </section>
 
-      <section id="roster" class="panel">
-        <h2>Character Performance</h2>
+      <section id="characters" class="panel">
+        <h2>キャラクター性能</h2>
+        <p class="panel-note">各キャラの性能はゲーム内調整に合わせて更新されます。</p>
         <div id="rosterGrid" class="roster-grid"></div>
       </section>
 
       <section id="origin" class="panel origin-panel">
-        <h2>Original Story</h2>
+        <h2>原作を読む</h2>
         <p>
-          天涯比隣の原作・世界観は、フェニチルさんのnoteで順次公開予定です。
-          先に原作を読むと、キャラ同士の関係性やスキル背景が見えて対戦がもっと楽しくなります。
+          原作は現在執筆中。先に原作を読むと、チーム同士の関係やキャラの心情がより深く楽しめます。
         </p>
-        <p class="origin-catch">
-          原作は現在執筆中。原作を読むと余計にゲームが楽しくなるかも！
-        </p>
-        <a class="btn btn-main origin-btn" href="https://note.com/jz_fenichil" target="_blank" rel="noopener noreferrer">原作を読む</a>
+        <p class="origin-catch">原作を読むと、ゲームが余計に楽しくなるかも。</p>
+        <a class="btn btn-main origin-btn" href="https://note.com/jz_fenichil" target="_blank" rel="noopener noreferrer">
+          原作を読む（note）
+        </a>
       </section>
     </main>
 

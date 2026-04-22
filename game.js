@@ -163,12 +163,21 @@ const CHARACTER_CARD_ART_FILES = {
   // 後からカードイラストを差し込む場合はここに `id: "file.png"` を追加する。
 };
 
+const ILLUSTRATION_DIR = "assets/イラスト";
+
+function resolveIllustrationPath(fileName) {
+  if (!fileName) return "";
+  if (/^(?:https?:|data:|blob:)/.test(fileName)) return fileName;
+  if (fileName.startsWith("/") || fileName.startsWith("assets/")) return fileName;
+  return `${ILLUSTRATION_DIR}/${fileName}`;
+}
+
 function getCharacterPortrait(id) {
-  return CHARACTER_PORTRAIT_FILES[id] ?? "";
+  return resolveIllustrationPath(CHARACTER_PORTRAIT_FILES[id] ?? "");
 }
 
 function getCharacterCardArt(id) {
-  return CHARACTER_CARD_ART_FILES[id] ?? CHARACTER_PORTRAIT_FILES[id] ?? "";
+  return resolveIllustrationPath(CHARACTER_CARD_ART_FILES[id] ?? CHARACTER_PORTRAIT_FILES[id] ?? "");
 }
 
 const INITIAL_TEAMS = {
@@ -1597,7 +1606,7 @@ function refreshTopHeroBackground(forceShuffle = false) {
   }
   if (!state.topHeroImage) return;
 
-  const imagePath = state.topHeroImage.replace(/\\/g, "/");
+  const imagePath = encodeURI(resolveIllustrationPath(state.topHeroImage).replace(/\\/g, "/"));
   els.topScreen.style.setProperty("--top-hero-image", `url("${imagePath}")`);
   els.topScreen.classList.add("show-hero");
 }
